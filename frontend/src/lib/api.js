@@ -6,7 +6,7 @@ import axios from "axios";
 // 3. 401 responses автоматично logout-ват потребителя
 
 const api = axios.create({
-  baseURL: "http://localhost:4000/api",
+  baseURL: "https://maxai-saas-production.up.railway.app/api",
 });
 
 // Преди всяка заявка — вземаме token от localStorage и го слагаме в header-а

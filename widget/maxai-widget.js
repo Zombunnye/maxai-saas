@@ -6,7 +6,7 @@
   const TENANT_ID    = cfg.tenantId    || "demo";
   const COLOR        = cfg.primaryColor|| "#7c3aed";
   const GREETING     = cfg.greeting    || "Hello! How can I help you today?";
-  const API_URL      = cfg.apiUrl      || "http://localhost:4000";
+  const API_URL = cfg.apiUrl || "https://maxai-saas-production.up.railway.app";
  
   // Уникален ID за посетителя — пазим го в sessionStorage
   let visitorId = sessionStorage.getItem("maxai_vid");
