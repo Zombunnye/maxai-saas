@@ -15,7 +15,7 @@ const connectDB = require("./config/db");
 
 const adminRoutes = require("./routes/adminRoutes");
 const tenantRoutes = require("./routes/tenantRoutes");
-
+const planRoutes = require("./routes/planRoutes");
 
 connectDB();
 
@@ -50,6 +50,7 @@ app.use("/api/leads", leadRoutes);
 
 app.use("/api/admin", adminRoutes);
 app.use("/api/tenant", tenantRoutes);
+app.use("/api/plans", planRoutes);
 
 /*
 |--------------------------------------------------------------------------

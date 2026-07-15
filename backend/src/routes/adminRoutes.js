@@ -6,12 +6,11 @@ const {
   getTenantConversations,
   getGlobalStats,
 } = require("../controllers/adminController");
-
-// ─── WHY: ВСИЧКИ admin routes минават през adminMiddleware.
-// Само потребител с role === "admin" в JWT-то може да ги достъпи.
+const { changeTenantPlan } = require("../controllers/planController");
 
 router.get("/tenants", adminMiddleware, getAllTenants);
 router.get("/tenants/:id/conversations", adminMiddleware, getTenantConversations);
+router.put("/tenants/:id/plan", adminMiddleware, changeTenantPlan);
 router.get("/stats", adminMiddleware, getGlobalStats);
 
 module.exports = router;

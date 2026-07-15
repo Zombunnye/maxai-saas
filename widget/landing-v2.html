@@ -286,6 +286,36 @@
     .feat p    { font-size: 14px; color: var(--ink2); line-height: 1.6; }
 
     /* ── PRICING ────────────────────────────────────────────────── */
+    .currency-switch {
+      display: inline-flex;
+      gap: 4px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 4px;
+      margin-top: 24px;
+    }
+
+    .currency-btn {
+      border: none;
+      background: transparent;
+      padding: 8px 18px;
+      border-radius: 999px;
+      font-family: var(--body);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink2);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .currency-btn:hover { color: var(--ink); }
+
+    .currency-active {
+      background: var(--ink);
+      color: white !important;
+    }
+
     .pricing-grid {
       display: grid; grid-template-columns: repeat(3, 1fr);
       gap: 20px; margin-top: 56px; align-items: start;
@@ -596,6 +626,13 @@
   <h2 class="section-title">Simple, honest pricing</h2>
   <p class="section-sub">Start free. Upgrade when you're ready. No hidden fees, cancel anytime.</p>
 
+  <!-- Currency switcher -->
+  <div class="currency-switch">
+    <button class="currency-btn currency-active" data-currency="gbp">🇬🇧 GBP £</button>
+    <button class="currency-btn" data-currency="eur">🇪🇺 EUR €</button>
+    <button class="currency-btn" data-currency="usd">🇺🇸 USD $</button>
+  </div>
+
   <div class="pricing-grid">
     <div class="plan">
       <div class="plan-name">Starter</div>
@@ -614,7 +651,7 @@
     <div class="plan featured">
       <div class="plan-badge">Most popular</div>
       <div class="plan-name">Pro</div>
-      <div class="plan-price">£49<span>/mo</span></div>
+      <div class="plan-price"><span class="price-val" data-gbp="£49" data-eur="€59" data-usd="$59">£49</span><span>/mo</span></div>
       <div class="plan-desc">For growing businesses</div>
       <ul class="plan-features">
         <li>3 chatbots</li>
@@ -629,7 +666,7 @@
 
     <div class="plan">
       <div class="plan-name">Agency</div>
-      <div class="plan-price">£149<span>/mo</span></div>
+      <div class="plan-price"><span class="price-val" data-gbp="£149" data-eur="€179" data-usd="$179">£149</span><span>/mo</span></div>
       <div class="plan-desc">Sell to your own clients</div>
       <ul class="plan-features">
         <li>Unlimited chatbots</li>
@@ -643,6 +680,46 @@
     </div>
   </div>
 </section>
+
+<script>
+  // ─── CURRENCY SWITCHER ───
+  // Клик на бутон → всички .price-val елементи взимат стойността
+  // от съответния data-атрибут (data-gbp / data-eur / data-usd).
+  (function () {
+    var buttons = document.querySelectorAll(".currency-btn");
+    var prices = document.querySelectorAll(".price-val");
+
+    function setCurrency(cur) {
+      prices.forEach(function (p) {
+        p.textContent = p.getAttribute("data-" + cur);
+      });
+      buttons.forEach(function (b) {
+        b.classList.toggle("currency-active", b.getAttribute("data-currency") === cur);
+      });
+      try { localStorage.setItem("maxai_currency", cur); } catch (e) {}
+    }
+
+    buttons.forEach(function (b) {
+      b.addEventListener("click", function () {
+        setCurrency(b.getAttribute("data-currency"));
+      });
+    });
+
+    // Автоматично познаване: запазен избор > езикова настройка на браузъра > GBP
+    var saved = null;
+    try { saved = localStorage.getItem("maxai_currency"); } catch (e) {}
+
+    if (saved) {
+      setCurrency(saved);
+    } else {
+      var lang = (navigator.language || "en-GB").toLowerCase();
+      if (lang.includes("us")) setCurrency("usd");
+      else if (lang.includes("gb") || lang.includes("uk")) setCurrency("gbp");
+      else if (/de|fr|es|it|nl|pt|bg|ro|pl|gr|at|be|fi|ie/.test(lang)) setCurrency("eur");
+      else setCurrency("gbp");
+    }
+  })();
+</script>
 
 <div class="divider"></div>
 
