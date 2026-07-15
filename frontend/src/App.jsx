@@ -5,16 +5,14 @@ import Dashboard from "./pages/Dashboard";
 import Conversations from "./pages/Conversations";
 import Leads from "./pages/Leads";
 import Widget from "./pages/Widget";
+import BotTraining from "./pages/BotTraining";
+import AdminPanel from "./pages/AdminPanel";
 import Sidebar from "./components/Sidebar";
 import "./App.css";
 
-// ─── WHY: Използваме прост string state за routing вместо react-router-dom,
-// за да не добавяме нова зависимост. Приложението е single-tenant dashboard
-// без дълбоко URL нестване — прост state е достатъчен.
-
 export default function App() {
   const [page, setPage] = useState("dashboard");
-  const [authView, setAuthView] = useState("login"); // "login" | "register"
+  const [authView, setAuthView] = useState("login");
 
   const [user, setUser] = useState(() => {
     const saved = localStorage.getItem("maxai_user");
@@ -33,7 +31,6 @@ export default function App() {
     setAuthView("login");
   }
 
-  // Auth screens
   if (!user) {
     return authView === "login" ? (
       <Login onLogin={handleLogin} onSwitch={() => setAuthView("register")} />
@@ -42,12 +39,13 @@ export default function App() {
     );
   }
 
-  // Page map
   const pages = {
     dashboard: <Dashboard user={user} />,
     conversations: <Conversations />,
     leads: <Leads />,
+    training: <BotTraining />,
     widget: <Widget user={user} />,
+    admin: <AdminPanel />,
   };
 
   return (
