@@ -13,6 +13,9 @@ const conversationRoutes = require("./routes/conversationRoutes");
 const leadRoutes = require("./routes/leadRoutes");
 const connectDB = require("./config/db");
 
+const adminRoutes = require("./routes/adminRoutes");
+const tenantRoutes = require("./routes/tenantRoutes");
+
 
 connectDB();
 
@@ -44,6 +47,9 @@ app.use("/api/chat", chatRoutes);
 app.use("/api/chatbot", chatbotRoutes);
 app.use("/api/conversations", conversationRoutes);
 app.use("/api/leads", leadRoutes);
+
+app.use("/api/admin", adminRoutes);
+app.use("/api/tenant", tenantRoutes);
 
 /*
 |--------------------------------------------------------------------------
