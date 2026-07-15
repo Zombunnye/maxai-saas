@@ -1,0 +1,121 @@
+/* ═══════════════════════════════════════════════════════════════
+   ДОБАВИ ТОВА В КРАЯ НА frontend/src/App.css
+   (Plans & Pricing стилове)
+   ═══════════════════════════════════════════════════════════════ */
+
+.plans-message {
+  background: rgba(124,58,237,0.12);
+  border: 1px solid rgba(124,58,237,0.3);
+  color: var(--text);
+  border-radius: var(--radius-sm);
+  padding: 10px 16px;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.plan-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.price-inputs { display: flex; gap: 10px; margin-bottom: 16px; }
+
+.price-input-group {
+  display: flex; align-items: center; gap: 6px; flex: 1;
+}
+
+.price-symbol { font-size: 15px; font-weight: 700; color: var(--text2); }
+
+.price-num { margin-bottom: 0 !important; }
+
+.limits-row { display: flex; gap: 12px; margin-bottom: 12px; }
+.limits-row > div { flex: 1; }
+.limit-label { display: block; font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+
+.checks-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
+
+.check-label {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 13px; color: var(--text2); cursor: pointer;
+}
+.check-label input { accent-color: var(--purple); cursor: pointer; }
+
+.form-actions {
+  display: flex; justify-content: flex-end; gap: 10px;
+  margin-top: 20px; padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.cancel-btn {
+  padding: 10px 20px;
+  background: transparent;
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm);
+  color: var(--text2);
+  font-family: var(--font);
+  font-size: 13px;
+  cursor: pointer;
+}
+.cancel-btn:hover { border-color: var(--text2); color: var(--text); }
+
+.plans-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.plan-admin-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: border-color 0.15s;
+}
+.plan-admin-card:hover { border-color: var(--border2); }
+
+.plan-hidden { opacity: 0.5; }
+
+.plan-admin-top {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.plan-admin-name { font-size: 17px; font-weight: 700; color: white; }
+.plan-admin-key {
+  font-family: monospace; font-size: 11px; color: var(--muted);
+  background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 6px;
+}
+
+.plan-admin-prices {
+  display: flex; gap: 12px; align-items: baseline;
+  font-size: 20px; font-weight: 800; color: white;
+  margin-bottom: 14px;
+}
+.plan-admin-prices .muted { font-size: 13px; font-weight: 400; }
+
+.plan-admin-limits {
+  display: flex; flex-direction: column; gap: 5px;
+  font-size: 13px; color: var(--text2);
+  margin-bottom: 16px;
+}
+
+.plan-admin-actions { display: flex; gap: 8px; }
+
+.plan-select {
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 12px;
+  padding: 6px 10px;
+  cursor: pointer;
+  outline: none;
+}
+.plan-select:focus { border-color: var(--purple); }
+
+@media (max-width: 768px) {
+  .plan-form-grid { grid-template-columns: 1fr; }
+  .plans-cards { grid-template-columns: 1fr; }
+}

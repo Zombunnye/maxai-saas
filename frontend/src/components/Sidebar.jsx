@@ -1,6 +1,3 @@
-// ─── WHY: Admin Panel се показва САМО ако user.role === "admin".
-// Обикновените клиенти изобщо не виждат тази опция.
-
 const NAV = [
   { id: "dashboard", icon: "▦", label: "Dashboard" },
   { id: "conversations", icon: "💬", label: "Conversations" },
@@ -14,6 +11,7 @@ export default function Sidebar({ page, setPage, user, onLogout }) {
 
   if (user?.role === "admin") {
     navItems.push({ id: "admin", icon: "👑", label: "Admin Panel" });
+    navItems.push({ id: "plans", icon: "💳", label: "Plans & Pricing" });
   }
 
   return (
@@ -34,7 +32,7 @@ export default function Sidebar({ page, setPage, user, onLogout }) {
         {navItems.map((item) => (
           <button
             key={item.id}
-            className={`nav-item ${page === item.id ? "active" : ""} ${item.id === "admin" ? "nav-admin" : ""}`}
+            className={`nav-item ${page === item.id ? "active" : ""} ${["admin","plans"].includes(item.id) ? "nav-admin" : ""}`}
             onClick={() => setPage(item.id)}
           >
             <span className="nav-icon">{item.icon}</span>

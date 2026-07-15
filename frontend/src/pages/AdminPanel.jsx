@@ -4,41 +4,53 @@ import api from "../lib/api";
 export default function AdminPanel() {
   const [stats, setStats] = useState(null);
   const [tenants, setTenants] = useState([]);
+  const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState(null);
   const [convs, setConvs] = useState({});
+  const [message, setMessage] = useState("");
 
-  useEffect(() => {
-    async function load() {
-      try {
-        const [statsRes, tenantsRes] = await Promise.all([
-          api.get("/admin/stats"),
-          api.get("/admin/tenants"),
-        ]);
-        setStats(statsRes.data.stats);
-        setTenants(tenantsRes.data.tenants || []);
-      } catch (err) {
-        console.error("Admin load error:", err);
-      } finally {
-        setLoading(false);
-      }
+  async function load() {
+    try {
+      const [statsRes, tenantsRes, plansRes] = await Promise.all([
+        api.get("/admin/stats"),
+        api.get("/admin/tenants"),
+        api.get("/plans/all"),
+      ]);
+      setStats(statsRes.data.stats);
+      setTenants(tenantsRes.data.tenants || []);
+      setPlans(plansRes.data.plans || []);
+    } catch (err) {
+      console.error("Admin load error:", err);
+    } finally {
+      setLoading(false);
     }
-    load();
-  }, []);
+  }
+
+  useEffect(() => { load(); }, []);
 
   async function toggleTenant(id) {
     if (expanded === id) { setExpanded(null); return; }
     setExpanded(id);
-    // ─── WHY: Зареждаме разговорите lazy — само при отваряне,
-    // не наведнъж за всички tenants (би било бавно).
     if (!convs[id]) {
       try {
         const res = await api.get(`/admin/tenants/${id}/conversations`);
         setConvs((c) => ({ ...c, [id]: res.data.conversations || [] }));
-      } catch (err) {
-        console.error(err);
-      }
+      } catch (err) { console.error(err); }
     }
+  }
+
+  // ─── WHY: Директна смяна на план от dropdown-а — без модали,
+  // без излишни стъпки. Избираш → записва се → refresh на списъка.
+  async function changePlan(tenantId, newPlan) {
+    try {
+      const res = await api.put(`/admin/tenants/${tenantId}/plan`, { plan: newPlan });
+      setMessage("✅ " + res.data.message);
+      load();
+    } catch (err) {
+      setMessage("❌ " + (err.response?.data?.message || "Failed to change plan"));
+    }
+    setTimeout(() => setMessage(""), 4000);
   }
 
   if (loading) return <div className="page-loading">Loading admin panel…</div>;
@@ -58,6 +70,8 @@ export default function AdminPanel() {
           <p className="page-sub">Platform overview — all registered businesses</p>
         </div>
       </div>
+
+      {message && <div className="plans-message">{message}</div>}
 
       <div className="stat-grid">
         {statCards.map((s) => (
@@ -100,7 +114,18 @@ export default function AdminPanel() {
                       <div>{t.ownerName}</div>
                       <div className="muted" style={{ fontSize: "11px" }}>{t.ownerEmail}</div>
                     </td>
-                    <td><span className={`badge ${t.plan === "free" ? "badge-blue" : "badge-green"}`}>{t.plan.toUpperCase()}</span></td>
+                    <td>
+                      {/* ─── Dropdown за смяна на план ─── */}
+                      <select
+                        className="plan-select"
+                        value={t.plan}
+                        onChange={(e) => changePlan(t.id, e.target.value)}
+                      >
+                        {plans.map((p) => (
+                          <option key={p.key} value={p.key}>{p.name} (£{p.prices?.gbp ?? 0})</option>
+                        ))}
+                      </select>
+                    </td>
                     <td>{t.conversations}</td>
                     <td>{t.leads}</td>
                     <td className="muted">{new Date(t.createdAt).toLocaleDateString()}</td>

@@ -7,6 +7,7 @@ import Leads from "./pages/Leads";
 import Widget from "./pages/Widget";
 import BotTraining from "./pages/BotTraining";
 import AdminPanel from "./pages/AdminPanel";
+import PlansManager from "./pages/PlansManager";
 import Sidebar from "./components/Sidebar";
 import "./App.css";
 
@@ -46,6 +47,7 @@ export default function App() {
     training: <BotTraining />,
     widget: <Widget user={user} />,
     admin: <AdminPanel />,
+    plans: <PlansManager />,
   };
 
   return (
